@@ -12,6 +12,7 @@ app.get('/', async(req, res) => {
     res.send('<center><h1>Welcome to Cognition Project Backend</h1>')
 })
 app.use('/user', require('./routes/userRoutes'))
+app.use('/images', require('./routes/imageRoutes'))
 app.use('/password', require('./routes/passwordRoutes'))
 app.use('/creditcard', require('./routes/creditCardRoutes'))
 
