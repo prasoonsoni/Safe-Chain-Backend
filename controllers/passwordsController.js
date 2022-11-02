@@ -1,10 +1,6 @@
-const encryption = require('../scripts/encryption')
-const decryption = require('../scripts/decryption')
-const ipfsAPI = require('ipfs-api')
-const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
-
-const User = require('../models/User')
-
+import encryption from '../scripts/encryption.js'
+import decryption from '../scripts/decryption.js'
+import User from '../models/User.js'
 const savePassword = async (req, res) => {
     try {
         const { name, website, username, password, description, token } = req.body
@@ -72,4 +68,4 @@ const deletePassword = async (req, res) => {
     }
 }
 
-module.exports = { savePassword, getPassword, deletePassword }
+export default { savePassword, getPassword, deletePassword }

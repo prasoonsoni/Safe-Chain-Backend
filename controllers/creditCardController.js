@@ -1,10 +1,7 @@
-const encryption = require('../scripts/encryption')
-const decryption = require('../scripts/decryption')
-const ipfsAPI = require('ipfs-api')
-const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
-
-const User = require('../models/User')
-
+import encryption from '../scripts/encryption.js'
+import decryption from '../scripts/decryption.js'
+import User from '../models/User.js'
+import * as IPFS from 'ipfs'
 const saveCreditCard = async (req, res) => {
     try {
         const { number, expiry_date, holder_name, cvv, bank_name, token } = req.body
@@ -16,8 +13,10 @@ const saveCreditCard = async (req, res) => {
             bank_name
         }
         const encrpytedData = encryption(data, token)
-        const buffer = new Buffer(encrpytedData)
-        const file = await ipfs.files.add(buffer)
+        // Adding to IPFS
+        const node = await IPFS.create()
+        const results = node.add(encrpytedData)
+        
         if (!file[0].hash) {
             return res.json({ success: false, message: "Error Saving Credit Card Details. Try Again Later." })
         }
@@ -72,4 +71,4 @@ const deleteCreditCard = async (req, res) => {
     }
 }
 
-module.exports = { saveCreditCard, getCreditCards, deleteCreditCard }
+export default { saveCreditCard, getCreditCards, deleteCreditCard }

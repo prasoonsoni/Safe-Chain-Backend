@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const { Schema } = mongoose
+import mongoose from 'mongoose'
+const {Schema} = mongoose
 
 const UserSchema = new Schema({
     token: { type: String, required: true },
@@ -7,4 +7,4 @@ const UserSchema = new Schema({
     credit_cards: { type: [String], required: true, default: [] }
 })
 
-module.exports = mongoose.model('User', UserSchema)
+export default mongoose.model('User', UserSchema)

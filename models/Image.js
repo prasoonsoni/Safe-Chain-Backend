@@ -1,6 +1,5 @@
-const mongoose = require('mongoose')
-const { Schema } = mongoose
-
+import mongoose from 'mongoose'
+const {Schema} = mongoose
 const ImageSchema = new Schema({
     user: { type: mongoose.Types.ObjectId },
     image1: { type: String },
@@ -9,4 +8,4 @@ const ImageSchema = new Schema({
     image4: { type: String },
 })
 
-module.exports = mongoose.model('Image', ImageSchema)
+export default mongoose.model('Image', ImageSchema)

@@ -1,8 +1,8 @@
-const User = require('../models/User')
-const Image = require('../models/Image')
-const encryptImage = require('../scripts/imageEncryption')
-const decryptImage = require('../scripts/imageDecryption')
-const { ObjectId } = require('mongodb')
+import User from '../models/User.js'
+import Image from '../models/Image.js'
+import encryptImage from '../scripts/imageEncryption.js'
+import decryptImage from '../scripts/imageDecryption.js'
+import { ObjectId } from 'mongodb'
 
 const addImages = async (req, res) => {
     try {
@@ -55,4 +55,4 @@ const getImages = async (req, res) => {
     }
 }
 
-module.exports = { addImages, getImages }
+export default { addImages, getImages }

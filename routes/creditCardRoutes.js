@@ -1,9 +1,9 @@
-const express = require('express')
+import express from 'express'
+import creditCardController from '../controllers/creditCardController.js'
 const router = express.Router()
-const creditCardController = require('../controllers/creditCardController')
 
 router.post('/add', creditCardController.saveCreditCard)
 router.post('/get', creditCardController.getCreditCards)
 router.delete('/delete', creditCardController.deleteCreditCard)
 
-module.exports = router
+export default router
