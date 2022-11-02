@@ -2,6 +2,8 @@ import encryption from '../scripts/encryption.js'
 import decryption from '../scripts/decryption.js'
 import User from '../models/User.js'
 import * as IPFS from 'ipfs'
+const node = await IPFS.create()
+
 const saveCreditCard = async (req, res) => {
     try {
         const { number, expiry_date, holder_name, cvv, bank_name, token } = req.body
@@ -13,14 +15,12 @@ const saveCreditCard = async (req, res) => {
             bank_name
         }
         const encrpytedData = encryption(data, token)
-        // Adding to IPFS
-        const node = await IPFS.create()
-        const results = node.add(encrpytedData)
-        
-        if (!file[0].hash) {
+        const results = await node.add(encrpytedData)
+        console.log(results)
+        if (!results.cid) {
             return res.json({ success: false, message: "Error Saving Credit Card Details. Try Again Later." })
         }
-        const update = await User.updateOne({ token: token }, { $push: { credit_cards: file[0].hash } })
+        const update = await User.updateOne({ token: token }, { $push: { credit_cards: results.cid } })
         if (!update.acknowledged) {
             return res.json({ success: false, message: "Error Saving Credit Card Details. Try Again Later." })
         }
@@ -41,11 +41,15 @@ const getCreditCards = async (req, res) => {
         const cids = user.credit_cards
         const data = []
         for (var i = 0; i < cids.length; i++) {
-            const files = await ipfs.files.get(cids[i])
-            if (!files[0].content.toString('utf8')) {
+            const stream = node.cat(cids[i])
+            const decoder = new TextDecoder()
+            let text = ''
+            for await (const chunk of stream) {
+                text += decoder.decode(chunk, { stream: true })
+            }
+            if (!text) {
                 return res.json({ success: false, message: "Error getting data" })
             }
-            const text = files[0].content.toString('utf8')
             const decryptedData = decryption(text, token)
             decryptedData.id = cids[i]
             data.push(decryptedData)
