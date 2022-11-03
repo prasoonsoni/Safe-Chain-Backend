@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import passwordsController from'../controllers/passwordsController.js'
+import passwordsController from'../controllers/dataController.js'
 
 router.post('/add', passwordsController.savePassword)
 router.post('/get', passwordsController.getPassword)

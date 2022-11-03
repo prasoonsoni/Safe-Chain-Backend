@@ -1,5 +1,5 @@
 import express from 'express'
-import creditCardController from '../controllers/creditCardController.js'
+import creditCardController from '../controllers/dataController.js'
 const router = express.Router()
 
 router.post('/add', creditCardController.saveCreditCard)
