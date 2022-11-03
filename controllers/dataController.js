@@ -92,7 +92,7 @@ const savePassword = async (req, res) => {
         if (!results.cid) {
             return res.json({ success: false, message: "Error Saving Password. Try Again Later." })
         }
-        const update = await User.updateOne({ token: token }, { $push: { passwords: results.cid } })
+        const update = await User.updateOne({ _id:req.id }, { $push: { passwords: results.cid } })
         if (!update.acknowledged) {
             return res.json({ success: false, message: "Error Saving Password. Try Again Later." })
         }
@@ -106,7 +106,7 @@ const savePassword = async (req, res) => {
 const getPassword = async (req, res) => {
     try {
         const { token } = req.body
-        const user = await User.findOne({ token: token })
+        const user = await User.findOne({ _id:req.id })
         if (!user) {
             return res.json({ success: false, message: "No user available." })
         }
