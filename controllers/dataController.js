@@ -20,7 +20,7 @@ const saveCreditCard = async (req, res) => {
         if (!results.cid) {
             return res.json({ success: false, message: "Error Saving Credit Card Details. Try Again Later." })
         }
-        const update = await User.updateOne({ token: token }, { $push: { credit_cards: results.cid } })
+        const update = await User.updateOne({ _id:req.id }, { $push: { credit_cards: results.cid } })
         if (!update.acknowledged) {
             return res.json({ success: false, message: "Error Saving Credit Card Details. Try Again Later." })
         }
@@ -34,7 +34,7 @@ const saveCreditCard = async (req, res) => {
 const getCreditCards = async (req, res) => {
     try {
         const { token } = req.body
-        const user = await User.findOne({ token: token })
+        const user = await User.findOne({ _id:req.id })
         if (!user) {
             return res.json({ success: false, message: "No user available." })
         }

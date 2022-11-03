@@ -5,19 +5,21 @@ dotenv.config()
 
 const getUser = async (req, res, next) => {
     const token = req.header('auth-token')
+    const password = req.header('password')
     if (!token) {
         return res.json({ success: false, message: "Authentication token is required." })
     }
     try {
-        const tokenVerification = jwt.verify(token, process.env.JWT_SECRET_KEY)
-        const user = await User.findOne({ token })
-        if (!user) {
+        const decoded = jwt.verify(token, password)
+        const { user } = decoded
+        const userExists = await User.findOne({ _id: user.id })
+        if (!userExists) {
             return res.json({ success: false, message: "No User Found" })
         }
-        req.id = user._id
+        req.id = user.id
         next()
     } catch (error) {
-        res.json({ success: false, message: "Authentication token is not valid." })
+        res.json({ success: false, message: "Secret key or Password is not valid." })
         console.log(error.message)
     }
 }
