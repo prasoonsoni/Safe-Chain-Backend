@@ -44,7 +44,7 @@ const getImages = async (req, res) => {
         }
         const shuffedImages = [decryptImage(images.image1, token), decryptImage(images.image2, token), decryptImage(images.image3, token), decryptImage(images.image4, token)]
         for (var i = shuffedImages.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));   
+            var j = Math.floor(Math.random() * (i + 1));
             var temp = shuffedImages[i];
             shuffedImages[i] = shuffedImages[j];
             shuffedImages[j] = temp;
@@ -62,4 +62,23 @@ const getImages = async (req, res) => {
     }
 }
 
-export default { addImages, getImages }
+const verifyImages = async (req, res) => {
+    try {
+        const { image1, image2, image3, image4 } = req.body
+        const user = req.id
+        const token = req.header('auth-token')
+        const images = await Image.findOne({ user })
+        if (!images) {
+            return res.json({ success: false, message: "User Images Not Found" })
+        }
+        if (!decryptImage(images.image1, token) === image1 || !decryptImage(images.image1, token) === image1 || !decryptImage(images.image2, token) === image2 || !decryptImage(images.image3, token) === image3 || !decryptImage(images.image4, token) === image4) {
+            return res.json({ success: false, message: "Order not correct" })
+        }
+        res.json({ success: true, message: "Order Matched" })
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: "Internal Server Error Occured. Try Again Later." })
+    }
+}
+
+export default { addImages, getImages, verifyImages }
