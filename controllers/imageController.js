@@ -42,11 +42,18 @@ const getImages = async (req, res) => {
         if (!images) {
             return res.json({ success: false, message: "User Images Not Found" })
         }
+        const shuffedImages = [decryptImage(images.image1, token), decryptImage(images.image2, token), decryptImage(images.image3, token), decryptImage(images.image4, token)]
+        for (var i = shuffedImages.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));   
+            var temp = shuffedImages[i];
+            shuffedImages[i] = shuffedImages[j];
+            shuffedImages[j] = temp;
+        }
         const data = {
-            image1: decryptImage(images.image1, token),
-            image2: decryptImage(images.image2, token),
-            image3: decryptImage(images.image3, token),
-            image4: decryptImage(images.image4, token)
+            image1: shuffedImages[0],
+            image2: shuffedImages[1],
+            image3: shuffedImages[2],
+            image4: shuffedImages[3]
         }
         res.json({ success: true, message: "Images Retreived Successfully", data: data })
     } catch (error) {
