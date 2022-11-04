@@ -71,7 +71,7 @@ const verifyImages = async (req, res) => {
         if (!images) {
             return res.json({ success: false, message: "User Images Not Found" })
         }
-        if (!decryptImage(images.image1, token) === image1 || !decryptImage(images.image1, token) === image1 || !decryptImage(images.image2, token) === image2 || !decryptImage(images.image3, token) === image3 || !decryptImage(images.image4, token) === image4) {
+        if (decryptImage(images.image1, token) !== image1 || decryptImage(images.image2, token) !== image2 || decryptImage(images.image3, token) !== image3 || decryptImage(images.image4, token) !== image4) {
             return res.json({ success: false, message: "Order not correct" })
         }
         res.json({ success: true, message: "Order Matched" })
